@@ -15,10 +15,10 @@
     "libraries":[
         { "file": "./common/common_rand.c" },
         { "file": "./common/common.c" },
-        { "file": "./common/complex_simple.c" }
+        { "file": "./complex_simple.c" }
     ],
     "include-directories":[
-        { "file": "./common/"}
+        { "file": "./common"}
     ],
     "dependencies": [
         {
