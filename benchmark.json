@@ -3,12 +3,25 @@
    "name":"Fast Fourier Transform",
    "short-name":"fft",
    "description":"Performs the Fast Fourier Transform (FFT) function on a random data set.",
-   "version":"0.1.0",
+   "version":"1.0.0",
    "input-size":{
       "small": 4,
       "medium": 10,
-      "large": 13
+      "large": 12
    },
-   "random-seed":1337,
-   "dwarf": "spectral methods"
+   "dwarf": "spectral methods",
+   "expected-output": {
+      "small": { 
+          "nb-significant-signals": 2, 
+          "normalized-amplitude": 458 
+      },
+      "medium": { 
+          "nb-significant-signals": 2, 
+          "normalized-amplitude": 321 
+      },
+      "large": { 
+          "nb-significant-signals": 2, 
+          "normalized-amplitude": 128 
+      } 
+   }
 }

@@ -1,12 +1,10 @@
 {
     "type": "implementation",
     "short-name":"matlab",
-    "description":"Matlab implementation using native complex numbers",
+    "description":"Matlab native implementation",
     "language":"matlab",
     "core-source-files":[
-       { "file": "./sinComplexVector.m"},
-       { "file": "./fftSimpleComplex.m"},
-       { "file": "./fft2DComplex.m"}
+       { "file": "./sinComplexVector.m"}
     ],
     "runner-source-file": { "file": "./runner.m" },
     "runner-arguments": [

@@ -11,7 +11,7 @@ end
 m = repmat(sinComplexVector(n,1,1),n,1);
 
 tic;
-res = fft2DComplex(m,n);
+res = fft2(m);
 elapsedTime = toc;
 
 nb_significant_signals = sum(sum(res>10));

@@ -129,6 +129,37 @@ function randomComplexMatrix(n){
     return M;
 }
 
+// n is the number of elements in the vector
+// amplitude is the amplitude of the sinusoidal signal
+// period_divisor is the length of the sinusoidal signal as a divisor of the number of samples (ex: 1 means the period spans n samples, 2 means the period spans n/2 samples, etc.)
+function sinComplexVector(n, amplitude, period_divisor) {
+    var real = new Float64Array(n);
+    var imag = new Float64Array(n);
+
+    var step = (period_divisor * 4 * Math.PI) / (n-1);
+
+    for (var i = 0; i < n; ++i) {
+        real[i] = amplitude * Math.sin(step*i);
+        imag[i] = 0;
+    }
+
+    return { 'r': real, 'i': imag };
+}
+
+function nbOfSignificantSignals(M, n, threshold) {
+  var count = 0;
+
+  for (var i = 0; i < n; i++) {
+    for (var j = 0; j < n; ++j) {
+      if (M[i]['r'][j] > threshold) {
+        count++;
+      }
+    }
+  }
+
+  return count;
+}
+
 
 function printComplexArray(r, i) { // TA
     var a = [];
@@ -151,22 +182,38 @@ function runner (twoExp){
         throw new Error("ERROR: invalid exponent of '" + twoExp + "' for input size");
     }
     var n = 1 << twoExp;
-    var data1D = randomComplexArray(n);
-    var data2D = randomComplexMatrix(n);
+    var data2D = [];
+    for (var i = 0; i < n; ++i) {
+      data2D[i] = sinComplexVector(n,1,1);
+    }
     var t1, t2;
-
-    /*
-    t1 = performance.now();
-    var results = fftSimple(data1D.r,data1D.i);
-    t2 = performance.now();
-    console.log("The total 1D FFT time for " + n + " size was " + (t2-t1)/1000 + " s");
-    */
 
     t1 = performance.now();
     var results2D = fft2D(data2D);
     t2 = performance.now();
+
+    var amplitude = results2D[0]['r'][2];
+    var exp = Math.log10(amplitude);   
+    if (exp > 0) {
+      exp = Math.ceil(exp);
+    } else {
+      exp = Math.floor(exp);
+    }
+
+    var normalized_amplitude = Math.floor((1000/Math.pow(10,exp)) * amplitude);
+
+    var nb_signals = nbOfSignificantSignals(results2D,n,10);
+    console.log("nb of significant signals: " + nb_signals);
+    console.log("value at (0,2): " + amplitude);
+
     console.log("The total 2D FFT time for " + n + " x " + n + " was " + (t2-t1)/1000 + " s");
-    console.log(JSON.stringify({ status: 1,
-             options: "run(" + twoExp + ")",
-             time: (t2 - t1) / 1000 }));
+    console.log(JSON.stringify(
+      { status: 1,
+        options: "run(" + twoExp + ")",
+        time: (t2 - t1) / 1000,
+        output: {
+          "nb-significant-signals": nb_signals,
+          "normalized-amplitude": normalized_amplitude
+        }
+      }));
 }
